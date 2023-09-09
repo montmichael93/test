@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+      .media-container {
+        display: inline-grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        grid-column-gap: 0px;
+        grid-row-gap: 0px;
+      }
+
+      .videoPlayer {
+        grid-area: 1 / 1 / 2 / 2;
+      }
+
+      .videoPlayer {
+        z-index: 1;
+      }
+
+      .gif-overlay {
+        z-index: 0;
+      }
+
+      .gif-overlay {
+        grid-area: 1 / 1 / 2 / 2;
+      }
+    </style>
+    <!--
+    <style>
+      @media screen and (max-width: 768px) {
+        .videoPlayer {
+          z-index: 0;
+        }
+
+        .gif-overlay {
+          z-index: 1;
+        }
+      }
+    </style>
+-->
+  </head>
+  <body>
+    <div class="media-container" id="media-container">
+      <div id="overlay" class="gif-overlay">
+        <img
+          src="https://res.cloudinary.com/dba6zdavl/image/upload/v1680531028/archives_video_gifs/2023-04-03_141027_Real_Bitcoin.gif"
+          width="420"
+          alt="Overlay GIF"
+        />
+      </div>
+      <video
+        controls
+        disablePictureInPicture
+        controlslist="nodownload noplaybackrate"
+        width="420"
+        id="videoPlayer"
+        class="videoPlayer"
+        src="https://res.cloudinary.com/dba6zdavl/video/upload/v1680531039/archives_video_gifs/2023-04-03_141030_Real_Bitcoin.mp4"
+      ></video>
+    </div>
+
+    <script>
+      const mediaContainer = document.getElementById("media-container");
+
+      const video = document.getElementById("videoPlayer");
+      const additionalVideoSelector =
+        document.getElementsByClassName("videoPlayer");
+      const gifOverlay = document.getElementById("overlay");
+
+      function removegif() {
+        gifOverlay.style.zIndex = 0;
+        video.style.zIndex = 1;
+      }
+
+      function addGif() {
+        gifOverlay.style.zIndex = 1;
+        video.style.zIndex = 0;
+      }
+
+      video.controls = false;
+
+      if (window.innerWidth < 768) {
+        console.log(video.controls);
+        // Code to execute for mobile users
+        mediaContainer.addEventListener("touchstart", function (event) {
+          // Code to execute when touch starts (equivalent to mouseenter)
+          video.controls = true;
+          if (video.pause) {
+            video.play();
+          } else {
+            video.pause();
+          }
+        });
+      } else {
+        mediaContainer.addEventListener("mouseenter", () => {
+          if (video.currentTime === 0) {
+            addGif();
+          } else {
+            video.controls = true;
+          }
+        });
+
+        mediaContainer.addEventListener("mouseleave", () => {
+          video.controls = false;
+          if (video.currentTime === 0) {
+            removegif();
+          }
+        });
+
+        mediaContainer.addEventListener("click", () => {
+          removegif();
+          if (video.pause) {
+            video.play();
+          } else {
+            video.pause();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
